@@ -1,5 +1,5 @@
 import React,{useState,useEffect,useCallback} from 'react';
-import { View,StyleSheet,FlatList,
+import { View,StyleSheet,FlatList,KeyboardAvoidingView,Keyboard,
   TouchableOpacity,TextInput,Text, ToastAndroid } from "react-native";
 import HomeScreen from './HomeScreen';
 import firestore, { firebase } from '@react-native-firebase/firestore';
@@ -121,15 +121,17 @@ const App=()=>{
   }
 
   return (
-    <View style={{flex:1,paddingHorizontal:10,paddingVertical:5}}>
+    <KeyboardAvoidingView keyboardVerticalOffset={10} style={{flex:1,paddingHorizontal:10,paddingVertical:5}}>
       {
         todoList===[] ?
         <View style={{flex:1,justifyContent:'center',alignItems:'center'}}>
           <Text style={{color:'#00000002',fontSize:18}}>No task available!</Text>
         </View>
         :
-        <View style={{flex:1,paddingHorizontal:10,paddingVertical:5}}>
+        <View keyboardVerticalOffset={0} style={{flex:1,paddingHorizontal:10,paddingVertical:5}}>
         <FlatList data={todoList}
+        removeClippedSubviews={false}
+        keyboardShouldPersistTaps='always'
         keyExtractor={(items,index)=>index.toString()}   
        renderItem={(items)=>{
          console.log(items);
@@ -164,7 +166,7 @@ const App=()=>{
    <Loader isLoading={isLoading}/>
    </View>
       }
-    </View>
+    </KeyboardAvoidingView>
   );
 };
 

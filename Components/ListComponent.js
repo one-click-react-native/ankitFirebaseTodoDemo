@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import {View,StyleSheet,Text,TouchableOpacity, TextInput} from 'react-native';
+import {View,StyleSheet,Text,TouchableOpacity, TextInput,Keyboard, KeyboardAvoidingView} from 'react-native';
 
 const ListComponent=props=>{
 
@@ -9,7 +9,7 @@ const ListComponent=props=>{
         setEditText(text);
     }
     return(
-        <View style={{width:'100%',flexDirection:'column',
+        <KeyboardAvoidingView behavior='height' keyboardVerticalOffset={10} style={{width:'100%',flexDirection:'column',
         borderWidth:1,paddingHorizontal:10,
         paddingVertical:15,marginBottom:5,borderRadius:20}}>
             {
@@ -67,7 +67,7 @@ const ListComponent=props=>{
             <Text style={{fontSize:18,fontWeight:'bold',color:'#fff'}}>Delete</Text>
             </TouchableOpacity>
         </View>
-        </View>
+        </KeyboardAvoidingView>
     )
 }
 
