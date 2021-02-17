@@ -14,6 +14,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "657975093907-5ccg6k7tj3ar5rd95g8tnfh3o5p601at.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.firebasereactnativedemo",
+            "certificate_hash": "5e8f16062ea3cd2c4a0d547876baa6f38cabf625"
+          }
+        },
+        {
           "client_id": "657975093907-ddcgl3d252u028gr4mjih6ostm0knj42.apps.googleusercontent.com",
           "client_type": 3
         }
