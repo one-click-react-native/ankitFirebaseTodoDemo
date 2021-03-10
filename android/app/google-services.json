@@ -22,6 +22,14 @@
           }
         },
         {
+          "client_id": "657975093907-avkgs2am1b2l4vb3pcfrr2a7dlth6k9b.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.firebasereactnativedemo",
+            "certificate_hash": "3f5f765e096db61c6701a4294be74fe8c05cddb0"
+          }
+        },
+        {
           "client_id": "657975093907-ddcgl3d252u028gr4mjih6ostm0knj42.apps.googleusercontent.com",
           "client_type": 3
         }

@@ -13,7 +13,7 @@ import { SafeAreaProvider } from 'react-native-safe-area-context';
 
 const App=()=>{
 
-  LogBox.ignoreLogs(['WARN...','Warning...']);
+  LogBox.ignoreAllLogs(true);
 
   const RootReducer=combineReducers({
     AuthReducer:AuthReducer

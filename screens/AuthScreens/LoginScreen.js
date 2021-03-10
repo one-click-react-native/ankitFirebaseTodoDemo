@@ -7,6 +7,7 @@ import AppLoader from '../../Components/Loader';
 import {loginFuncHandler} from '../../store/Actions';
 
 const LoginScreen=props=>{
+
    
     let emailRef=useRef();
     let passRef=useRef();
@@ -79,6 +80,7 @@ const LoginScreen=props=>{
             <Text style={styles.titleText}>LOGIN</Text>
             <TextInputComponent
                 value={userInput.email}
+                testID="emailTestId"
                 placeholder="Enter email..."
                 changeText={emailTextChangeHandler}
                 ref={emailRef}
@@ -90,6 +92,7 @@ const LoginScreen=props=>{
             />
             <TextInputComponent
                 value={userInput.password}
+                testID="passwordTestId"
                 placeholder="Enter password..."
                 changeText={passwordTextChangeHandler}
                 ref={passRef}
@@ -99,17 +102,17 @@ const LoginScreen=props=>{
                 keyboardType='default'
             />
             
-            <ButtonComponent btnClick={loginClickHandler} text="Login"/>
+            <ButtonComponent testID="loginBtnClickTest" btnClick={loginClickHandler} text="Login"/>
             <View style={{flexDirection:'row',marginTop:10}}>
                 <Text style={{color:'blue',fontSize:16}}>Create a new account ? </Text>
-                <TouchableOpacity onPress={()=>{
+                <TouchableOpacity testID="signupBtnClickTest" onPress={()=>{
                     props.navigation.navigate('Signup');
                 }} activeOpacity={0.4}>
                     <Text style={{color:'blue',fontSize:17,textDecorationLine:'underline'}}>Signup</Text>
                 </TouchableOpacity>
                
             </View>
-            <TouchableOpacity style={{marginTop:20}} onPress={()=>{
+            <TouchableOpacity testID="forgotBtnClickTest" style={{marginTop:20}} onPress={()=>{
                     props.navigation.navigate('ForgotPassword');
                 }} activeOpacity={0.4}>
                     <Text style={{color:'blue',fontSize:17,textDecorationLine:'underline'}}>Forgot Password?</Text>

@@ -1,4 +1,4 @@
-import React, { useState,useRef } from 'react';
+import React, { useState,useRef, useEffect } from 'react';
 import {View,StyleSheet,Text,TextInput,ToastAndroid,TouchableOpacity,Image} from 'react-native';
 import ButtonComponent from '../../Components/ButtonComponent';
 import TextInputComponent from '../../Components/TextInput';
@@ -10,7 +10,14 @@ const EditProfileScreen=props=>{
     
     const [editable,setEditable]=useState(false);
     const [isLoading,setIsLoading]=useState(false);
-    const userData=Auth().currentUser;
+    let userData=Auth().currentUser;
+    useEffect(()=>{
+        Auth().onAuthStateChanged((user)=>{
+            userData=user
+        })
+    },[])
+
+    
     let displayNameRef=useRef('displayName');
     let phoneNumRef=useRef('phone');
     const [userInput,setUserInput]=useState({
@@ -60,9 +67,12 @@ const EditProfileScreen=props=>{
                 displayName:userInput.displayName,
                 photoURL:userInput.imageUrl
             })
-            ToastAndroid.show("Profile updated!",ToastAndroid.SHORT);
             setIsLoading(false)
-            setEditable(false);
+
+            if(!phoneChanged){
+            ToastAndroid.show("Profile updated!",ToastAndroid.SHORT);
+                setEditable(false);
+            }
             
             if(phoneChanged){
 
@@ -86,6 +96,7 @@ const EditProfileScreen=props=>{
                               
                            await userData.updatePhoneNumber(credential);
                             ToastAndroid.show("Profile updated!",ToastAndroid.SHORT)
+                            setEditable(false);
                              break;
                         case Auth.PhoneAuthState.AUTO_VERIFY_TIMEOUT:
                             console.log(phoneAuthSnapshot.state)
@@ -104,7 +115,6 @@ const EditProfileScreen=props=>{
                     }
                     setIsLoading(false);
                     setPhoneChanged(false);
-                    setEditable(false);
                 })
             }
                  
@@ -144,13 +154,21 @@ const EditProfileScreen=props=>{
         
         await userData.updatePhoneNumber(credential);
         ToastAndroid("Profile Updated!",ToastAndroid.SHORT);
+        setEditable(false)
         } catch (error) {
             setIsLoading(false);
-            ToastAndroid.show(error.code,ToastAndroid.SHORT);
+            console.log(error)
+            ToastAndroid.show("Please reneter phone number.",ToastAndroid.SHORT);
         }
         
        
     setIsLoading(false);
+}
+const otpChangeHandler=text=>{
+    setPhoneDetail({
+        ...phoneDetail,
+        code:text
+    })
 }
 
     return(
@@ -223,6 +241,12 @@ const EditProfileScreen=props=>{
                 <ButtonComponent
                  text={editable ? phoneDetail.showOtpInput ? "Verify and Save" : "Save" : "Edit Profile"}
                   btnClick={phoneDetail.showOtpInput ? verifyCodeHnadler : editBtnClickHandler} />
+                  {
+                      editable && 
+                      <ButtonComponent text="Cancel" btnClick={()=>{
+                          setEditable(false);
+                      }} />
+                  }
                 <ButtonComponent text="Logout" btnClick={logoutBtnClickHandler} />
                 <AppLoader isLoading={isLoading}/>
         </View>

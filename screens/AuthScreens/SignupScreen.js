@@ -8,7 +8,6 @@ import AppLoader from '../../Components/Loader';
 import { useDispatch } from 'react-redux';
 import AuthActions from '../../store/Actions';
 import * as ImagePicker from 'react-native-image-picker';
-import { set } from 'react-native-reanimated';
 
 const SignupScreen=props=>{
 
@@ -111,6 +110,8 @@ const SignupScreen=props=>{
                             verificationId:phoneAuthSnapshot.verificationId
                         })
                         ToastAndroid.show("Verification code sent to your register number.",ToastAndroid.SHORT);
+                        ToastAndroid.show("Please wait for otp input or auto verification.",ToastAndroid.SHORT);
+
                         break;
                     case Auth.PhoneAuthState.AUTO_VERIFIED:
                         console.log(phoneAuthSnapshot.state)
@@ -130,6 +131,8 @@ const SignupScreen=props=>{
                         password:''
                      })
                      setIsLoading(false);
+                 }).catch((error)=>{
+                     ToastAndroid.show(error.code,ToastAndroid.SHORT)
                  });
                          break;
                     case Auth.PhoneAuthState.AUTO_VERIFY_TIMEOUT:
@@ -142,8 +145,7 @@ const SignupScreen=props=>{
                         break;
 
                     case Auth.PhoneAuthState.ERROR:
-                        console.log(phoneAuthSnapshot.state)
-                        console.log(phoneAuthSnapshot.error);
+                        ToastAndroid.show(phoneAuthSnapshot.error.code,ToastAndroid.SHORT)
                         break;
 
                 }
@@ -188,7 +190,6 @@ const SignupScreen=props=>{
     return(
         <TouchableWithoutFeedback onPress={()=>Keyboard.dismiss()}>
         <View style={{flex:1,paddingHorizontal:20}} >
-            <Text style={styles.titleText}>Signup</Text>
             <View style={{width:'100%',justifyContent:'center',alignItems:'center'}}>
                 <TouchableOpacity activeOpacity={0.5} onPress={selectImageHandler}>
                 <Image source={{uri:userInput.imageUrl==='' ? 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png' :userInput.imageUrl}}

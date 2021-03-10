@@ -6,7 +6,7 @@ import SignupScreen from '../screens/AuthScreens/SignupScreen';
 import { useSelector } from 'react-redux';
 import HomeScreen from '../screens/UsersScreens/HomeScreen';
 import Auth from '@react-native-firebase/auth';
-import { Image, TouchableOpacity } from 'react-native';
+import { Image, LogBox, TouchableOpacity } from 'react-native';
 import EditProfileScreen from '../screens/AuthScreens/EditProfileScreen';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import UserNavigator from './UserNavigator';
@@ -18,6 +18,8 @@ const Stack=createStackNavigator();
 const Tab=createBottomTabNavigator();
 
 const AuthNavigator=props=>{
+
+    LogBox.ignoreAllLogs(true);
 
     const [loggedIn,setLoggedIn]=useState(false);
 

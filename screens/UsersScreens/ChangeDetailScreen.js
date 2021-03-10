@@ -8,11 +8,11 @@ import TextInputComponent from '../../Components/TextInput';
 const ChangeDetailScreen=props=>{
 
     const [isLoading,setLoading]=useState(false);
-    const [editable,setEditable]=useState(false);
     const [passEditable,setPassEditable]=useState(false);
-
+    const [editable,setEditable]=useState(false)
     const userData=Auth().currentUser;
-    const [emailInput,setEmailInput]=useState(userData.email)
+    console.log(userData)
+    const [emailInput,setEmailInput]=useState(userData!==null ? userData.email : '')
     const [passwordInput,setPasswordInput]=useState('')
 
     const emailChangeHandler=text=>{
@@ -49,24 +49,35 @@ const ChangeDetailScreen=props=>{
         if(editable){
             try {
                 setLoading(true);
-                await userData.updateEmail(emailInput).then((value)=>{
-                    console.log(value);
+                await userData.updateEmail(emailInput);
                     setLoading(false);
                     ToastAndroid.show("Email Updated!",ToastAndroid.SHORT);
-                    setEmailInput(userData.email)
-                });
+                    setEmailInput(userData.email);
+                    setEditable(false);
             } catch (error) {
                 setLoading(false);
                 ToastAndroid.show(error.code,ToastAndroid.SHORT);
-            }
+            }   
         }else{
             setEditable(true);
         }
+      
     }
+    const logoutBtnClickHandler=async()=>{
+        try {
+              await Auth().signOut();
+        } catch (error) {
+            ToastAndroid.show(error.code,ToastAndroid.SHORT);
+        }
+    }
+
 
     return(
         <View style={styles.mainContainer}>
-            
+            {
+                !editable ?
+                <Text style={styles.textStyle}>{userData.email}</Text>
+                :
                 <TextInputComponent
                 value={emailInput}
                 placeholder="Enter email..."
@@ -75,7 +86,16 @@ const ChangeDetailScreen=props=>{
                 onSubmitEditing={changeEmailClickHandler}
                 returnKeyType="done"
                />
-            <ButtonComponent text={editable ? "Save Email" : "Change Email"} btnClick={changeEmailClickHandler} />
+
+            }
+                
+            <ButtonComponent text={editable ? "Change Email" : "Edit Email" } btnClick={changeEmailClickHandler} />
+            {
+                      editable && 
+                      <ButtonComponent text="Cancel" btnClick={()=>{
+                          setEditable(false);
+                      }} />
+                  }
             {
                 passEditable && 
                 <TextInputComponent
@@ -89,6 +109,7 @@ const ChangeDetailScreen=props=>{
                />
             }
             <ButtonComponent text="Change Password" btnClick={changePasswordClickhandler} />
+            <ButtonComponent text="Logout" btnClick={logoutBtnClickHandler} />
             <AppLoader isLoading={isLoading} />
         </View>
     )
