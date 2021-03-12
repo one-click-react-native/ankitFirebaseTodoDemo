@@ -1,11 +1,50 @@
 import React,{useState,useEffect} from 'react';
 import { View,StyleSheet,FlatList,KeyboardAvoidingView,Keyboard,
-    TouchableOpacity,TextInput,Text, ToastAndroid } from "react-native";
+    TouchableOpacity,TextInput,Text, ToastAndroid,I18nManager } from "react-native";
 import firestore, { firebase } from '@react-native-firebase/firestore';
 import ListComponent from '../../Components/ListComponent';
 import AppLoader from '../../Components/Loader';
 import Auth from '@react-native-firebase/auth';
+import * as RNLocalize from 'react-native-localize';
+import i18n from 'i18n-js';
+import memoize from 'lodash.memoize';
 
+
+
+const transaltionGetters={
+  'ar-EG':()=>require("../../src/translations/ar.json"),
+  'fr-FR':()=>require("../../src/translations/fr.json"),
+  'en-IN':()=>require("../../src/translations/en.json"),
+  'ar':()=>require("../../src/translations/ar.json"),
+  'fr':()=>require("../../src/translations/fr.json"),
+  'en':()=>require("../../src/translations/en.json"),
+}
+const translate=memoize(
+  (key,config)=>{
+    console.log("key congif ",key,config)
+    return(i18n.t(key,config))
+  },
+  (key,config)=>{
+    console.log("key confi 2 :")
+    return(config ? key + JSON.stringify(config) : key)
+  }
+  );
+
+
+  const set18nConfig=()=>{
+    i18n.fallbacks=true;
+    i18n.missingTranslation=()=>{return undefined}
+    const fallBack={languageTag:"en",isRTL:false}
+    const { languageTag,isRTL} =
+      RNLocalize.findBestAvailableLanguage(Object.keys(transaltionGetters)) || fallBack;
+      translate.cache.clear();
+      console.log(RNLocalize.getLocales())
+      I18nManager.forceRTL(isRTL)
+      i18n.translations={
+        [languageTag]:transaltionGetters[languageTag](),
+      };
+      i18n.locale=languageTag;
+  }
 
 const HomeScreen=props=>{
     const [todoItem,setTodoItem]=useState('');
@@ -13,10 +52,28 @@ const HomeScreen=props=>{
     const todosRef=firestore().collection(userData.uid);
     const [todoList,setTodoList]=useState([]);
 
+    set18nConfig();
+
     const [isLoading,setIsLoading]=useState(false)
     useEffect(()=>{
+        
+        const handleLocalizationChange=()=>{
+          setI18nConfig()
+      .then(() => this.forceUpdate())
+      .catch((error) => {
+        console.error(error);
+      });
+        }
+    
+        RNLocalize.addEventListener("change",handleLocalizationChange);
         getDataFunc();
+        return ()=>{
+          RNLocalize.removeEventListener("change",handleLocalizationChange)
+        }
     },[])
+
+    
+
 
     const getDataFunc=async()=>{
         try {
@@ -24,9 +81,11 @@ const HomeScreen=props=>{
           const list=[];
           querySnapshot.forEach(doc=>{
             const {title,done,date}=doc.data();
+            console.log("Translate ....",translate('hello'))
+
             list.push({
               id:doc.id,
-              title:title,
+              title:translate(title),
               done:done,
               date:date
             })
@@ -93,7 +152,10 @@ const HomeScreen=props=>{
         keyExtractor={(items,index)=>index.toString()}   
        renderItem={(items)=>{
            return(
-               <ListComponent data={items.item} name={items.item.title} 
+               <ListComponent edit={translate("edit")} delete={translate("delete")}
+               cancel={translate("cancel")}
+               save={translate("save")}
+               data={items.item} name={items.item.title} 
                deleteBtnClick={deleteBtnClickHandler} editBtnClick={editBtnClickHander}  />
            )                
        }}/>
@@ -103,7 +165,7 @@ const HomeScreen=props=>{
        <View style={{width:'100%',flexDirection:'column',borderTopWidth:0.3,paddingTop:10}}>
            <TextInput 
                keyboardType='default'
-               placeholder='Enter task...'
+               placeholder={translate('enter_task')}
                onSubmitEditing={()=>{
                    Keyboard.dismiss();
                }}
@@ -118,7 +180,7 @@ const HomeScreen=props=>{
            style={{width:'30%',alignItems:'center',borderRadius:30,
            marginTop:10,
            paddingHorizontal:10,paddingVertical:5,backgroundColor:'blue'}}>
-               <Text style={{fontSize:18,fontWeight:'bold',color:'#fff'}}>Add</Text>
+               <Text style={{fontSize:18,fontWeight:'bold',color:'#fff'}}>{translate('add')}</Text>
            </TouchableOpacity>
        </View>
    </View>

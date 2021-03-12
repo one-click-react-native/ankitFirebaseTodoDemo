@@ -1,0 +1,9 @@
+{
+    "hello": "hello",
+    "add":"Add",
+    "delete":"Delete",
+    "enter_task":"Enter task...",
+    "edit":"Edit",
+    "cancel":"Cancel",
+    "save":"Save"
+  }

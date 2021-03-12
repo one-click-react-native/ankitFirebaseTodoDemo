@@ -1,0 +1,9 @@
+{
+    "hello": "Salut le Monde",
+    "add":"ajouter",
+    "delete":"effacer",
+    "enter_task":"entrer la tâche",
+    "edit":"Éditer...",
+    "cancel":"Annuler",
+    "save":"sauvegarder"
+  }

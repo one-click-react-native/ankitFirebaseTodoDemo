@@ -37,7 +37,7 @@ const ListComponent=props=>{
                     }}
                     style={{width:'30%',alignItems:'center',borderRadius:30,
                     paddingHorizontal:10,paddingVertical:5,backgroundColor:'red'}}>
-                   <Text style={{fontSize:18,fontWeight:'bold',color:'#fff'}}>Save</Text>
+                   <Text style={{fontSize:18,fontWeight:'bold',color:'#fff'}}>{props.save}</Text>
                    </TouchableOpacity>
                 }
             <TouchableOpacity 
@@ -54,7 +54,7 @@ const ListComponent=props=>{
              }}
              style={{width:'30%',alignItems:'center',borderRadius:30,
              paddingHorizontal:10,paddingVertical:5,backgroundColor:'red'}}>
-            <Text style={{fontSize:18,fontWeight:'bold',color:'#fff'}}>{editable ? 'Cancel' : 'Edit' }</Text>
+            <Text style={{fontSize:18,fontWeight:'bold',color:'#fff'}}>{editable ? props.cancel : props.edit }</Text>
             </TouchableOpacity>
             <TouchableOpacity 
              activeOpacity={0.6} 
@@ -64,7 +64,7 @@ const ListComponent=props=>{
              }}
              style={{width:'30%',alignItems:'center',borderRadius:30,
              paddingHorizontal:10,paddingVertical:5,backgroundColor:'red'}}>
-            <Text style={{fontSize:18,fontWeight:'bold',color:'#fff'}}>Delete</Text>
+            <Text style={{fontSize:18,fontWeight:'bold',color:'#fff'}}>{props.delete}</Text>
             </TouchableOpacity>
         </View>
         </KeyboardAvoidingView>
